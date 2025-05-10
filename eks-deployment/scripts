@@ -1,0 +1,7 @@
+aws cloudformation validate-template --template-body file://sgws-ecs-sbx-stack.yaml --region us-east-2
+
+aws cloudformation create-stack --stack-name sgws-eks-sbx --template-body file://sgws-ecs-sbx-stack.yaml --capabilities CAPABILITY_NAMED_IAM --region us-east-2
+
+aws cloudformation delete-stack --stack-name sgws-eks-sbx --region us-east-2
+
+aws cloudformation describe-stack-events --stack-name sgws-eks-sbx --region us-east-2
