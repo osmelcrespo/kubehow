@@ -1,0 +1,140 @@
+Install 4 ubuntu servers
+    k-master
+    k-worker-01
+    k-worker-02
+    k-worker-03
+
+#chmod 755 ./install_k8s_master.sh
+#chmod 755 ./install_k8s_worker.sh
+#chmod 755 ./bootstrap.sh
+
+#chmod 755 ./install_k8s_master.sh
+
+#scp install_k8s_master.sh osmel@192.168.1.50:/home/osmel
+#scp install_k8s_worker.sh osmel@192.168.1.50:/home/osmel
+#scp install_rancher.sh osmel@192.168.1.50:/home/osmel
+
+#scp ./bootstrap_kworker.sh osmel@10.10.100.20:/home/osmel
+#chmod 755 ./bootstrap_kworker.sh
+
+#scp ./bootstrap_kmaster.sh osmel@10.10.100.20:/home/osmel
+#chmod 755 ./bootstrap_kmaster.sh
+
+
+run in all servers
+
+    sudo apt update && sudo apt upgrade
+    sudo swapoff -a
+    sudo nano /etc/fstab
+        comment swap.img
+
+Install Docker
+    sudo apt-get remove docker docker-engine docker.io containerd runc
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    Log out and log back in
+        docker run hello-world
+        sudo mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
+        sudo systemctl restart containerd
+
+Install Kubernetes
+    sudo apt-get update
+    sudo apt-get install -y apt-transport-https ca-certificates curl
+    sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubelet kubeadm kubectl
+    sudo apt-mark hold kubelet kubeadm kubectl
+
+Only Master
+    Creating a cluster with kubeadm
+        sudo kubeadm init
+
+    Your Kubernetes control-plane has initialized successfully!
+
+    To start using your cluster, you need to run the following as a regular user:
+
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    Alternatively, if you are the root user, you can run:
+
+    export KUBECONFIG=/etc/kubernetes/admin.conf
+
+    You should now deploy a pod network to the cluster.
+    Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+    https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+    sudo firewall-cmd --permanent --add-port=6443/tcp
+    sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+    sudo firewall-cmd --permanent --add-port=10250/tcp
+    sudo firewall-cmd --permanent --add-port=10251/tcp
+    sudo firewall-cmd --permanent --add-port=10252/tcp
+    sudo firewall-cmd --permanent --add-port=10255/tcp
+    sudo firewall-cmd --reload
+
+Only Workers
+    sudo kubeadm join 192.168.1.50:6443 --token 1ggzsy.e0gox8gwzb8rxk4u --discovery-token-ca-cert-hash sha256:1ba54c2e341066feb49a386440866a5cd051251a12c8c579c0110f2fa77857b5
+
+    sudo firewall-cmd --permanent --add-port=10251/tcp
+    sudo firewall-cmd --permanent --add-port=10255/tcp
+    sudo firewall-cmd --reload
+
+Only Master
+    curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml -O
+    kubectl apply -f calico.yaml
+
+
+
+sudo kubeadm join 192.168.1.50:6443 --token rv32m3.mbkomhwjhy51b033 --discovery-token-ca-cert-hash sha256:bf104718b1e86c4b519966b430bc03e15025f390af36628e10f4006a174dc26b
+
+
+curl https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
+kubectl apply -f metallb-native.yaml
+
+
+
+kubectl apply -f https://downloads.portainer.io/ce2-18/portainer-agent-k8s-lb.yaml
+
+kubeadm token create --print-join-command
+kubeadm token list
+
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+
+
+
+
+sudo kubeadm join 192.168.1.50:6443 --token 9udf34.4gh1ot49gxc82qws --discovery-token-ca-cert-hash sha256:6b82533c572a0a1609f97dcab7129c9eadd5943da972527182808d31470206e6
+
+SET CALICO_KUBECONFIG=C:\Users\osmel\.kube\config
+
+
+KUBERNETES_MASTER=(kubectl config view -o jsonpath="{.clusters[?(@.name=='kubernetes')].cluster.server}")
+
+
+set KUBECONFIG=~/.kube/config
+SET CALICO_KUBECONFIG=C:\Users\osmel\.kube\config
+SET KUBE_CONFIG_PATH=C:\Users\osmel\.kube\config
+$env:KUBERNETES_MASTER=(kubectl config view -o jsonpath="{.clusters[?(@.name=='kubernetes')].cluster.server}")
+
+
+$env:KUBECONFIG="C:\Users\myusername\.kube\config"
+
+
+9$smu6h&W~Pc]dcV
+
+%bzqUg)9V"BS6|c7G4=-&5nw3_01MueA
+
+WIN-NFS:/k8s
+
+Splunk Token: 2b42c3f1-7dc2-4c57-b17e-87cc944d4583
+Splunk Admin Token: eyJraWQiOiJzcGx1bmsuc2VjcmV0IiwiYWxnIjoiSFM1MTIiLCJ2ZXIiOiJ2MiIsInR0eXAiOiJzdGF0aWMifQ.eyJpc3MiOiJhZG1pbiBmcm9tIHNwbHVuay03NGM0OWNiZmQ2LTVjbjZzIiwic3ViIjoiYWRtaW4iLCJhdWQiOiJsb2dpbiIsImlkcCI6IlNwbHVuayIsImp0aSI6IjFiMjY5ZTI4ZmFjYTg4YzE0MmNjMTBjYzU5NTliZDVhMWYzNmE3YTdkYmQyYjU4ZTIxZTFkYTc4MzVkY2IzOTciLCJpYXQiOjE2ODc5OTE1MzMsImV4cCI6MTY5MDU4MzUzMywibmJyIjoxNjg3OTkxNTMzfQ.ydYnHqg_woMn12rnWNo56Ryt3ISBoA3CNtxFe87UHM5xz5vvqZQUBNHnyiwbqdRWu4WwSbElCHa-AywyJ8XUHg

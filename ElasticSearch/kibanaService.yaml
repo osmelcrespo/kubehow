@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quickstart-kb-http-lb
+spec:
+  type: LoadBalancer
+  ports:
+    - name: https
+      protocol: TCP
+      port: 5601
+      targetPort: 5601
+  selector:
+    common.k8s.elastic.co/type: kibana
+    kibana.k8s.elastic.co/name: quickstart

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splunk
+  #namespace: splunk-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splunk
+  template:
+    metadata:
+      labels:
+        app: splunk
+    spec:
+      containers:
+        - name: splunk
+          image: splunk/splunk:latest
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: splunk-config
+          volumeMounts:
+            - name: splunk-data
+              mountPath: /opt/splunk/var
+            - name: splunk-data
+              mountPath: /opt/splunk/etc
+      volumes:
+        - name: splunk-data
+          persistentVolumeClaim:
+            claimName: splunk-data-claim

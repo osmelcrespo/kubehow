@@ -1,0 +1,12 @@
+auth:
+  enablePostgresUser: true
+  postgresPassword: "3k9^vKPMA26#gku%"
+  username: "osmelcrespo"
+  password: "u#g7SCBQ4^x9L_dr"
+  database: "app_db"
+
+# The postgres helm chart deployment will be using PVC postgresql-data-claim
+primary:
+  persistence:
+    enabled: true
+    existingClaim: "postgresql-data-claim"

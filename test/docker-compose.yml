@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mysg-customer:
+    image: mysg/customer-service
+    ports:
+      - '8080:8080'
+    environment:
+      - ECS_BASE_URL=https://qa-api.ecs.southernglazers.com/gateway-service/graphql
+      - AEM_BASE_URL=https://aem-dev.southernglazers.com/
+      - CACHE_TYPE=none
+      - ECS_ACCOUNT_FILTER=status:A AND  
+      - ECS_ACCOUNT_LIMIT=5000
+      - ECS_ACCOUNT_OFFSET=0
+      - ECS_MOSTSOLD_LIMIT=1000
+      - LOG_LEVEL_WEB_FILTER=DEBUG
+      - LOG_TARGET_FORMAT=CONSOLE
+      - REDIS_CACHE_AEM_TTL=30d
+      - REDIS_CACHE_MOSTSOLD_TTL=1d
+      - REDIS_CACHE_TTL=5m
+      - REDIS_HOST_NAME=demo-poc-redis-mysg.redis.cache.windows.net
+      - REDIS_PORT=6380
+      - REDIS_TIMEOUT=60000
+      - SERVICE_NAME=customer-service
+      - PORT=8080
+      - LOG_TARGET=DEV
+      - PUBLIC_METHOD_LOGGING_LEVEL=DEBUG
+      - PRIVATE_METHOD_LOGGING_LEVEL=DEBUG
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=488028d2-e8be-496b-a220-a68ff395f495;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=cb389845-911a-497d-830e-2d1d89b22ef4
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M

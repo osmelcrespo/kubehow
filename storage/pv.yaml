@@ -1,0 +1,14 @@
+# pv.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: demo_storage
+  hostPath:
+    path: /path/to/storage

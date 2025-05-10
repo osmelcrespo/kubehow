@@ -1,0 +1,21 @@
+services:
+  cache:
+    image: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --loglevel warning
+    environment:
+      - REDIS_PASSWORD=redis!!!Password
+    volumes:
+      - dbdata:/data
+  redis-insight:
+    image: redis/redisinsight
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+volumes:
+  dbdata:
+  redis-insight:

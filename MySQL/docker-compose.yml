@@ -1,0 +1,41 @@
+# version: '3'
+ 
+# services:
+#   db:
+#     image: mysql:5.7
+#     container_name: db
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 9$smu6h&W~Pc]dcV
+#       MYSQL_DATABASE: app_db
+#       MYSQL_USER: db_user
+#       MYSQL_PASSWORD: 9$smu6h&W~Pc]dcV
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - dbdata:/var/lib/mysql
+#     restart: always
+# volumes:
+#   dbdata:
+
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  dbdata:

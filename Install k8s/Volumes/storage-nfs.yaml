@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs
+provisioner: truenas-nfs
+parameters:
+  server: 192.168.1.220
+  path: /mnt/p-main
+  readOnly: "false"
+  type: pd-standard

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: splunk-config
+  #namespace: postgres-system
+  labels:
+    app: splunk
+data:
+  SPLUNK_START_ARGS: --accept-license
+  SPLUNK_PASSWORD: 9$smu6h&W~Pc]dcV
+  DEBUG: "true"

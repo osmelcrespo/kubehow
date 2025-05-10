@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysg-customer-deployment
+  labels:
+    app: mysg-customer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysg-customer
+  template:
+    metadata:
+      labels:
+        app: mysg-customer
+    spec:
+      containers:
+      - name: mysg-customer
+        image: osmelcrespo/customer-service
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ECS_BASE_URL
+          value: "https://qa-api.ecs.southernglazers.com/gateway-service/graphql"
+        - name: AEM_BASE_URL
+          value: "https://aem-dev.southernglazers.com/"
+        - name: CACHE_TYPE
+          value: "none"
+        - name: ECS_ACCOUNT_FILTER
+          value: "status:A AND"
+        - name: ECS_ACCOUNT_LIMIT
+          value: "5000"
+        - name: ECS_ACCOUNT_OFFSET
+          value: "0"
+        - name: ECS_MOSTSOLD_LIMIT
+          value: "1000"
+        - name: LOG_LEVEL_WEB_FILTER
+          value: "DEBUG"
+        - name: LOG_TARGET_FORMAT
+          value: "CONSOLE"
+        - name: REDIS_CACHE_AEM_TTL
+          value: "30d"
+        - name: REDIS_CACHE_MOSTSOLD_TTL
+          value: "1d"
+        - name: REDIS_CACHE_TTL
+          value: "5m"
+        - name: REDIS_HOST_NAME
+          value: "demo-poc-redis-mysg.redis.cache.windows.net"
+        - name: REDIS_PORT
+          value: "6380"
+        - name: REDIS_TIMEOUT
+          value: "60000"
+        - name: SERVICE_NAME
+          value: "customer-service"
+        - name: PORT
+          value: "8080"
+        - name: LOG_TARGET
+          value: "DEV"
+        - name: PUBLIC_METHOD_LOGGING_LEVEL
+          value: "DEBUG"
+        - name: PRIVATE_METHOD_LOGGING_LEVEL
+          value: "DEBUG"
+        - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+          value: "InstrumentationKey=488028d2-e8be-496b-a220-a68ff395f495;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=cb389845-911a-497d-830e-2d1d89b22ef4"
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"

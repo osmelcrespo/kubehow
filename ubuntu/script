@@ -1,0 +1,1 @@
+docker run -d -p 2222:22 -v E:\Repos:/root/repos --name my-ssh-ubuntu ubuntu-ssh-enabled

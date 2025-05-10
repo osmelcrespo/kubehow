@@ -1,0 +1,12 @@
+version: '3'
+services:
+  cache:
+    image: redis
+    restart: always
+    ports:
+      - '6380:6379'
+    command: redis-server --loglevel warning
+    volumes:
+      - dbdata_2:/data
+volumes:
+  dbdata_2:
